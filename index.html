@@ -49,7 +49,7 @@
             margin-bottom: 30px;
         }
  
-        /* Building Visualization */
+ 
         .building {
             background: #f8f9fa;
             border-radius: 15px;
@@ -184,7 +184,7 @@
             animation: pulse 1s infinite;
         }
  
-        /* Control Panel */
+   
         .control-panel {
             background: #f8f9fa;
             border-radius: 15px;
@@ -232,7 +232,7 @@
             border-color: #ffc107;
         }
  
-        /* Status Panel */
+      
         .status-panel {
             background: #f8f9fa;
             border-radius: 15px;
@@ -285,7 +285,7 @@
             margin-bottom: 0;
         }
  
-        /* Algorithm Info */
+
         .algorithm-info {
             background: #e7f3ff;
             border-left: 4px solid #2196F3;
@@ -355,7 +355,7 @@
         <p class="subtitle">Interactive Simulation with SCAN Algorithm</p>
  
         <div class="main-content">
-            <!-- Building Visualization -->
+            
             <div class="building">
                 <div class="floor" id="floor-3">
                     <div class="floor-label">Floor 3</div>
@@ -389,7 +389,7 @@
                 </div>
             </div>
  
-            <!-- Control Panel -->
+
             <div class="control-panel">
                 <div class="panel-title">Inside Elevator Control</div>
                 <div class="floor-buttons">
@@ -400,7 +400,7 @@
                 </div>
  
                 <div class="algorithm-info">
-                    <h3>🧠 SCAN Algorithm</h3>
+                    <h3> SCAN Algorithm</h3>
                     <p><strong>How it works:</strong></p>
                     <ul>
                         <li>Elevator continues in current direction</li>
@@ -412,7 +412,7 @@
                 </div>
             </div>
  
-            <!-- Status Panel -->
+            
             <div class="status-panel">
                 <div class="panel-title">System Status</div>
                 
@@ -457,12 +457,12 @@
     </div>
  
     <script>
-        // Elevator System Class
+   
         class ElevatorSystem {
             constructor() {
                 this.currentFloor = 0;
-                this.state = 'IDLE'; // IDLE, MOVING_UP, MOVING_DOWN, DOORS_OPENING, DOORS_CLOSING
-                this.direction = null; // 'UP' or 'DOWN'
+                this.state = 'IDLE'; 
+                this.direction = null; 
                 this.requestQueue = [];
                 this.isMoving = false;
                 this.tripCount = 0;
@@ -510,7 +510,6 @@
                     return;
                 }
  
-                // SCAN Algorithm: Sort requests based on direction
                 this.requestQueue.sort((a, b) => {
                     if (this.direction === 'UP') {
                         // When going up, prioritize floors above current position
@@ -521,9 +520,9 @@
                         } else if (b >= this.currentFloor) {
                             return 1;
                         }
-                        return b - a; // Then handle floors below in descending order
+                        return b - a;
                     } else if (this.direction === 'DOWN') {
-                        // When going down, prioritize floors below current position
+       
                         if (a <= this.currentFloor && b <= this.currentFloor) {
                             return b - a; // Descending order
                         } else if (a <= this.currentFloor) {
@@ -531,9 +530,9 @@
                         } else if (b <= this.currentFloor) {
                             return 1;
                         }
-                        return a - b; // Then handle floors above in ascending order
+                        return a - b; 
                     } else {
-                        // No direction set, determine based on first request
+                       
                         const nextFloor = this.requestQueue[0];
                         this.direction = nextFloor > this.currentFloor ? 'UP' : 'DOWN';
                         return this.direction === 'UP' ? a - b : b - a;
@@ -551,12 +550,12 @@
  
                 const targetFloor = this.requestQueue[0];
                 
-                // Set direction if not set
+    
                 if (!this.direction) {
                     this.direction = targetFloor > this.currentFloor ? 'UP' : 'DOWN';
                 }
  
-                // Check if we need to change direction
+                
                 const hasRequestsInDirection = this.direction === 'UP' 
                     ? this.requestQueue.some(f => f > this.currentFloor)
                     : this.requestQueue.some(f => f < this.currentFloor);
@@ -568,8 +567,7 @@
                 this.state = this.direction === 'UP' ? 'MOVING_UP' : 'MOVING_DOWN';
                 this.isMoving = true;
                 this.updateDisplay();
- 
-                // Animate movement
+
                 const startFloor = this.currentFloor;
                 const endFloor = targetFloor;
                 const floorsToMove = Math.abs(endFloor - startFloor);
@@ -584,14 +582,14 @@
                 this.tripCount++;
                 
                 await this.openDoors();
-                await this.sleep(2000); // Keep doors open
+                await this.sleep(2000); 
                 await this.closeDoors();
  
                 this.isMoving = false;
                 this.updateDisplay();
                 this.updateStats();
  
-                // Continue processing queue
+     
                 setTimeout(() => this.processQueue(), 500);
             }
  
@@ -603,7 +601,7 @@
                     await this.sleep(1000);
                     const currentPos = from + (direction * (i + 1));
                     
-                    // Move elevator visually
+                    
                     const oldShaft = document.getElementById(`shaft-${from + direction * i}`);
                     const newShaft = document.getElementById(`shaft-${currentPos}`);
                     
@@ -615,7 +613,7 @@
                     this.elevatorElement.classList.add('moving');
                     setTimeout(() => this.elevatorElement.classList.remove('moving'), 300);
  
-                    // Update floor indicator
+           
                     const indicator = this.elevatorElement.querySelector('.floor-indicator');
                     indicator.textContent = currentPos === 0 ? 'G' : currentPos;
                 }
@@ -666,7 +664,7 @@
                 document.getElementById('trips-count').textContent = this.tripCount;
                 document.getElementById('floors-traveled').textContent = this.floorsTravel;
                 
-                // Calculate efficiency (ideal vs actual floors traveled)
+               
                 const efficiency = this.totalRequests > 0 
                     ? Math.round((this.totalRequests / this.floorsTravel) * 100)
                     : 100;
@@ -679,10 +677,9 @@
             }
         }
  
-        // Initialize the system
+
         const elevator = new ElevatorSystem();
- 
-        // UI Functions
+
         function pressFloorButton(floor) {
             elevator.addRequest(floor);
         }
@@ -690,13 +687,12 @@
         function callElevator(floor, direction) {
             elevator.addRequest(floor);
             
-            // Visual feedback for call button
             const button = event.target;
             button.classList.add('active');
             setTimeout(() => button.classList.remove('active'), 2000);
         }
  
-        // Initial display update
+
         elevator.updateDisplay();
     </script>
 </body>
